@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SecKill.Infrastructure;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SecKill
 {
@@ -31,7 +33,10 @@ namespace SecKill
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            // 通过依赖注入注册数据库上下文
 
+            // services.AddDbContext<DefaultContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddCustomDbContext(Configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -59,6 +64,36 @@ namespace SecKill
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+
+    }
+
+    /// <summary>
+    /// 自定义扩展方法
+    /// </summary>
+    static class CustomExtensionsMethods
+    {
+        /// <summary>
+        /// 添加自定义数据上下文
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
+        {
+            var connstr = configuration.GetConnectionString("DefaultConnection");
+            services.AddEntityFrameworkSqlServer()
+                   .AddDbContext<DefaultContext>(options =>
+                   {
+                       options.UseSqlServer(connstr,sqlServerOptionsAction: sqlOptions =>
+                      {
+                          sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                      });
+                   },
+                       ServiceLifetime.Scoped  //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
+                   );
+            return services;
         }
     }
 }

@@ -13,10 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\" />
     <Folder Include="Application\" />
-    <Folder Include="Domain\" />
-    <Folder Include="Domain\AggregatesModel\" />
-    <Folder Include="Domain\SeedWork\" />
+    <Folder Include="Infrastructure\Repositories\" />
   </ItemGroup>
 </Project>
