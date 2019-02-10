@@ -1,11 +1,16 @@
 import Vue from "vue";
 import Router from "vue-router";
+import Cookies from "js-cookie";
+
 import Home from "./views/Home.vue";
 import Login from "./views/Login.vue";
+import Order from "./views/Order.vue";
+import Payment from "./views/Payment.vue";
+import Queue from "./views/Queue.vue";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: "/",
@@ -18,6 +23,21 @@ export default new Router({
       component: Login
     },
     {
+      path: "/order",
+      name: "order",
+      component: Order
+    },
+    {
+      path: "/payment",
+      name: "payment",
+      component: Payment
+    },
+    {
+      path: "/queue",
+      name: "queue",
+      component: Queue
+    },
+    {
       path: "/about",
       name: "about",
       // route level code-splitting
@@ -28,3 +48,14 @@ export default new Router({
     }
   ]
 });
+// 拦截非法路由
+router.beforeEach((to, from, next) => {
+  var identity = Cookies.get("identity");
+  if (to.name === "login" || identity) {
+    next();
+  } else {
+    next({ name: "login" });
+  }
+});
+
+export default router;

@@ -1,4 +1,4 @@
-# seckill.webapp
+# vli3
 
 ## Project setup
 ```
