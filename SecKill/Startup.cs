@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SecKill.IdentityServer;
 using SecKill.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,13 @@ namespace SecKill
             // services.AddDbContext<DefaultContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddCustomDbContext(Configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            // 配置IdentityServer4相关服务
+            services.AddIdentityServer()
+                    .AddDeveloperSigningCredential() // 开发者签名
+                    .AddInMemoryApiResources(IdentityServerConfig.GetApis())
+                    .AddInMemoryIdentityResources(IdentityServerConfig.GetIdentityResources())
+                    .AddInMemoryClients(IdentityServerConfig.GetClients())
+                    .AddTestUsers(IdentityServerConfig.GetUsers());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +65,12 @@ namespace SecKill
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            // 2.使用IdentityServer 中间件
+            app.UseIdentityServer();
+
+            // 启用认证
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
@@ -86,10 +100,10 @@ namespace SecKill
             services.AddEntityFrameworkSqlServer()
                    .AddDbContext<DefaultContext>(options =>
                    {
-                       options.UseSqlServer(connstr,sqlServerOptionsAction: sqlOptions =>
-                      {
-                          sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                      });
+                       options.UseSqlServer(connstr, sqlServerOptionsAction: sqlOptions =>
+                       {
+                           sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                       });
                    },
                        ServiceLifetime.Scoped  //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
                    );

@@ -27,8 +27,7 @@ namespace SecKill.Controllers
                 return BadRequest(ModelState);
             var users = _dbContext.Set<Domain.AggregatesModel.User>();
             var user = users.Where(m => m.UserName == model.UserName && m.Password == model.Password).FirstOrDefault();
-
-            return Ok(user);
+            return Ok(user.UserId);
         }
     }
 }

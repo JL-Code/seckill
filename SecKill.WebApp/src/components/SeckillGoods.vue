@@ -65,7 +65,7 @@ export default {
           clearInterval(this.timer);
         }
       }, 100);
-      console.debug("setTimer", this.timer);
+      // console.debug("setTimer", this.timer);
     },
     enable() {
       this.disabled = false;

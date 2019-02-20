@@ -22,7 +22,7 @@ export default {
         var startDate = dayjs(this.startDate);
         var currentDate = dayjs(Date.now());
         var diff = startDate.diff(currentDate);
-        console.log("diff", diff);
+        // console.log("diff", diff);
         diff -= 1000;
         if (diff < 0) {
           diff = 0;
