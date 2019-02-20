@@ -1,19 +1,21 @@
-﻿using SecKill.Domain.SeedWork;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace SecKill.Domain.AggregatesModel
+namespace SecKill.Application.Models
 {
     /// <summary>
-    /// 秒杀订单
+    /// 订单信息
     /// </summary>
-    public class SeckillOrder : Entity, IAggregateRoot
+    public class OrderDto
     {
         public Guid OrderId { get; set; }
 
         /// <summary>
         /// 订单状态
         /// </summary>
-        public OrderState OrderState { get; set; }
+        public string OrderState { get; set; }
 
         public DateTime OrderDate { get; set; }
 
@@ -33,17 +35,5 @@ namespace SecKill.Domain.AggregatesModel
         /// 简单的收货地址
         /// </summary>
         public string Address { get; set; }
-    }
-
-    public enum OrderState
-    {
-        // 未支付
-        UnPaid = 0,
-
-        // 已支付
-        Paid = 1,
-
-        // 订单关闭
-        Closed = 99
     }
 }

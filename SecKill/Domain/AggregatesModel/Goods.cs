@@ -18,5 +18,7 @@ namespace SecKill.Domain.AggregatesModel
         /// 库存数量
         /// </summary>
         public int StockCount { get; set; }
+
+        public string Img { get; set; }
     }
 }

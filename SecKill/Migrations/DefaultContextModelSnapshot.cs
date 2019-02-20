@@ -15,7 +15,7 @@ namespace SecKill.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -26,6 +26,8 @@ namespace SecKill.Migrations
 
                     b.Property<string>("GoodsName");
 
+                    b.Property<string>("Img");
+
                     b.Property<double>("Price");
 
                     b.Property<int>("StockCount");
@@ -33,6 +35,16 @@ namespace SecKill.Migrations
                     b.HasKey("GoodsId");
 
                     b.ToTable("Goods");
+
+                    b.HasData(
+                        new
+                        {
+                            GoodsId = new Guid("b266ade2-ff83-44d3-aa60-128ab17dbf43"),
+                            GoodsName = "华为（HUAWEI） mate20pro手机 馥蕾红 8G+256G 全网通（UD屏内指纹版）",
+                            Img = "https://res.vmallres.com/pimages//product/6901443281213/800_800_1546486249080mp.png",
+                            Price = 5999.0,
+                            StockCount = 10
+                        });
                 });
 
             modelBuilder.Entity("SecKill.Domain.AggregatesModel.SeckillGoods", b =>
@@ -57,6 +69,19 @@ namespace SecKill.Migrations
                     b.HasKey("SeckillGoodsId");
 
                     b.ToTable("SeckillGoods");
+
+                    b.HasData(
+                        new
+                        {
+                            SeckillGoodsId = new Guid("a17fb06a-d4b7-454a-ac7a-b73c769ed113"),
+                            EndDate = new DateTime(2019, 2, 21, 0, 42, 49, 113, DateTimeKind.Local).AddTicks(6527),
+                            GoodsId = new Guid("b266ade2-ff83-44d3-aa60-128ab17dbf43"),
+                            GoodsName = "华为（HUAWEI） mate20pro手机 馥蕾红 8G+256G 全网通（UD屏内指纹版）",
+                            Img = "https://res.vmallres.com/pimages//product/6901443281213/800_800_1546486249080mp.png",
+                            Quantity = 10,
+                            SeckillPrice = 9.9000000000000004,
+                            StartDate = new DateTime(2019, 2, 20, 23, 42, 49, 114, DateTimeKind.Local).AddTicks(9721)
+                        });
                 });
 
             modelBuilder.Entity("SecKill.Domain.AggregatesModel.SeckillOrder", b =>
@@ -72,7 +97,7 @@ namespace SecKill.Migrations
 
                     b.Property<DateTime>("OrderDate");
 
-                    b.Property<string>("OrderState");
+                    b.Property<int>("OrderState");
 
                     b.Property<string>("PaymentTerms");
 
@@ -97,6 +122,15 @@ namespace SecKill.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("b4d7e62d-3a46-4a56-85bb-dc0d31f2b610"),
+                            Address = "长江国际",
+                            Password = "1",
+                            UserName = "jiangy"
+                        });
                 });
 #pragma warning restore 612, 618
         }

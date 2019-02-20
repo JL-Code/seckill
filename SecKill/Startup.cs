@@ -53,8 +53,8 @@ namespace SecKill
                    options.TokenValidationParameters = new TokenValidationParameters
                    {
                        NameClaimType = "name",
-                       ValidIssuer = "http://localhost:8080", //jwtSettings.Issuer,
-                       ValidAudience = "http://localhost:8080",//jwtSettings.Audience,
+                       ValidIssuer = "http://localhost:8082", //jwtSettings.Issuer,
+                       ValidAudience = "http://localhost:8082",//jwtSettings.Audience,
                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(JwtOptions.Constants.SECRET_KEY))
                        /***********************************TokenValidationParameters的参数默认值***********************************/
                        // RequireSignedTokens = true,

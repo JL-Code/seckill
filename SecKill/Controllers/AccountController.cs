@@ -34,6 +34,15 @@ namespace SecKill.Controllers
 
             // 生成jwt格式的令牌
 
+            if (user == null)
+            {
+                return NotFound(new
+                {
+                    code = 11000,
+                    message = "账号或密码错误"
+                });
+            }
+
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var authTime = DateTime.UtcNow;
             var expiresAt = authTime.AddMinutes(10);
@@ -60,7 +69,8 @@ namespace SecKill.Controllers
             {
                 token_type = "Bearer",
                 access_token = jwtTokenHandler.WriteToken(securityToken),
-                profile = new {
+                profile = new
+                {
                     sid = user.UserId,
                     name = user.UserName,
                     auth_time = new DateTimeOffset(authTime).ToUnixTimeSeconds(),
@@ -68,5 +78,6 @@ namespace SecKill.Controllers
                 }
             });
         }
+
     }
 }

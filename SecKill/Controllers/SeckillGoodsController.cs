@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SecKill.Application.Models;
 using SecKill.Application.Services;
@@ -26,6 +27,13 @@ namespace SecKill.Controllers
         {
             var data = _seckillGoodsService.ListSeckillGoods();
             return data;
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult Post()
+        {
+            return Ok();
         }
 
     }

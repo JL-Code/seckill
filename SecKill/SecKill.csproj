@@ -14,4 +14,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.2" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.15" />
   </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Infrastructure\ApiResult\" />
+  </ItemGroup>
 </Project>

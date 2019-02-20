@@ -14,35 +14,13 @@ namespace SecKill.Infrastructure.EntityConfigurations
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.HasKey(m => m.UserId);
-            builder.ToTable("User");
-        }
-    }
-
-    public class GoodsConfiguration : IEntityTypeConfiguration<Goods>
-    {
-        public void Configure(EntityTypeBuilder<Goods> builder)
-        {
-            builder.HasKey(m => m.GoodsId);
-            builder.ToTable("Goods");
-        }
-    }
-
-    public class SeckillGoodsConfiguration : IEntityTypeConfiguration<SeckillGoods>
-    {
-        public void Configure(EntityTypeBuilder<SeckillGoods> builder)
-        {
-            builder.HasKey(m => m.SeckillGoodsId);
-            builder.ToTable("SeckillGoods");
-        }
-    }
-
-    // TODO: 通过Codesmith生成DDD基础代码的时候应该考虑到EF的主要版本差异
-    public class SeckillOrderConfiguration : IEntityTypeConfiguration<SeckillOrder>
-    {
-        public void Configure(EntityTypeBuilder<SeckillOrder> builder)
-        {
-            builder.HasKey(m => m.OrderId);
-            builder.ToTable("SeckillOrder");
+            builder.ToTable("User").HasData(new User
+            {
+                UserId = Guid.NewGuid(),
+                UserName = "jiangy",
+                Password = "1",
+                Address = "长江国际"
+            });
         }
     }
 }

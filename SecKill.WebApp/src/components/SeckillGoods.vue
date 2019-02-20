@@ -8,7 +8,7 @@
           <div class="bottom clearfix">
             <time class="time"></time>
             <span>秒杀价：</span>
-            <span class="price">￥{{goods.price}}</span>
+            <span class="price">￥{{goods.seckillPrice}}</span>
             <el-button
               type="text"
               :disabled="disabled"
