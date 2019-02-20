@@ -7,8 +7,6 @@ import Login from "./views/Login.vue";
 import Order from "./views/Order.vue";
 import Payment from "./views/Payment.vue";
 import Queue from "./views/Queue.vue";
-import CascaderTest from "./views/CascaderTest.vue";
-import CascaderTest1 from "./views/CascaderTest1.vue";
 
 Vue.use(Router);
 
@@ -33,16 +31,6 @@ const router = new Router({
       path: "/payment",
       name: "payment",
       component: Payment
-    },
-    {
-      path: "/cascaderTest",
-      name: "cascaderTest",
-      component: CascaderTest
-    },
-    {
-      path: "/cascaderTest1",
-      name: "cascaderTest1",
-      component: CascaderTest1
     },
     {
       path: "/queue",

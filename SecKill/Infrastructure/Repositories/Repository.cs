@@ -1,4 +1,5 @@
-﻿using SecKill.Domain.SeedWork;
+﻿using Microsoft.EntityFrameworkCore;
+using SecKill.Domain.SeedWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,34 +10,41 @@ namespace SecKill.Infrastructure.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class, IAggregateRoot
     {
+        readonly DefaultContext _dbContext;
+
+        public Repository(DefaultContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         public T Add(T entity)
         {
-            throw new NotImplementedException();
+            return _dbContext.Set<T>().Add(entity).Entity;
         }
 
         public T Get(object id)
         {
-            throw new NotImplementedException();
+            return _dbContext.Find<T>(id);
         }
 
-        public Task<T> GetAsync(object id)
+        public async Task<T> GetAsync(object id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.FindAsync<T>(id);
         }
 
-        public Task<T> GetAsync(Expression<Func<T, bool>> predicate)
+        public async Task<T> GetAsync(Expression<Func<T, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Set<T>().FirstOrDefaultAsync(predicate);
         }
 
         public IEnumerable<T> ListEntities()
         {
-            throw new NotImplementedException();
+            return _dbContext.Set<T>().AsNoTracking().AsEnumerable();
         }
 
         public void Remove(T entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Set<T>().Remove(entity);
         }
 
         public IQueryable<T> SqlQuery(string sqlstr, params object[] parameters)
@@ -51,12 +59,14 @@ namespace SecKill.Infrastructure.Repositories
 
         public T Update(T entity)
         {
-            throw new NotImplementedException();
+            return _dbContext.Set<T>().Update(entity).Entity;
         }
 
         public T Update(T oldEntity, T newEntity)
         {
-            throw new NotImplementedException();
+            var entry = _dbContext.Entry(oldEntity);
+            entry.CurrentValues.SetValues(newEntity);
+            return entry.Entity;
         }
     }
 }

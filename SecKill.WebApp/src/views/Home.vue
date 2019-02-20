@@ -11,6 +11,7 @@
     {{watchObj}}
     <el-button @click="test">测试</el-button>
     <el-button @click="getTestResult">获取值</el-button>
+    <el-button @click="validateAccessToken">验证AccessToken</el-button>
   </div>
 </template>
 
@@ -33,8 +34,8 @@ export default {
           goodsName:
             "华为（HUAWEI） mate20pro手机 馥蕾红 8G+256G 全网通（UD屏内指纹版）",
           price: 1.09,
-          startDate: "2019-02-10 21:56:00",
-          endDate: "2019-02-11 00:00:00",
+          startDate: "2019-02-20 16:16:00",
+          endDate: "2019-02-21 00:00:00",
           status: ""
         }
       ]
@@ -77,6 +78,11 @@ export default {
     },
     getTestResult() {
       console.log("getTestResult", this.watchObj);
+    },
+    validateAccessToken() {
+      this.$http.get("/api/values").then(data => {
+        alert(data);
+      });
     }
   }
 };

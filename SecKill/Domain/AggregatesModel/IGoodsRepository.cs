@@ -2,7 +2,5 @@
 
 namespace SecKill.Domain.AggregatesModel
 {
-    public interface IUserRepository : IRepository<User>
-    {
-    }
+    public interface IGoodsRepository : IRepository<Goods> { }
 }

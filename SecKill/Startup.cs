@@ -1,17 +1,19 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SecKill.IdentityServer;
+using Microsoft.IdentityModel.Tokens;
+using SecKill.Application.Services;
+using SecKill.Domain.AggregatesModel;
+using SecKill.Domain.SeedWork;
 using SecKill.Infrastructure;
+using SecKill.Infrastructure.Repositories;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
 namespace SecKill
 {
@@ -35,17 +37,54 @@ namespace SecKill
             });
 
             // 通过依赖注入注册数据库上下文
-
-            // services.AddDbContext<DefaultContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddCustomDbContext(Configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            // 配置IdentityServer4相关服务
-            services.AddIdentityServer()
-                    .AddDeveloperSigningCredential() // 开发者签名
-                    .AddInMemoryApiResources(IdentityServerConfig.GetApis())
-                    .AddInMemoryIdentityResources(IdentityServerConfig.GetIdentityResources())
-                    .AddInMemoryClients(IdentityServerConfig.GetClients())
-                    .AddTestUsers(IdentityServerConfig.GetUsers());
+
+            #region 添加 Jwt token Authentication 认证方案
+
+            services.AddAuthentication(options =>
+            {
+
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+               .AddJwtBearer(options =>
+               {
+                   options.TokenValidationParameters = new TokenValidationParameters
+                   {
+                       NameClaimType = "name",
+                       ValidIssuer = "http://localhost:8080", //jwtSettings.Issuer,
+                       ValidAudience = "http://localhost:8080",//jwtSettings.Audience,
+                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(JwtOptions.Constants.SECRET_KEY))
+                       /***********************************TokenValidationParameters的参数默认值***********************************/
+                       // RequireSignedTokens = true,
+                       // SaveSigninToken = false,
+                       // ValidateActor = false,
+                       // 将下面两个参数设置为false，可以不验证Issuer和Audience，但是不建议这样做。
+                       // ValidateAudience = true,
+                       // ValidateIssuer = true, 
+                       // ValidateIssuerSigningKey = false,
+                       // 是否要求Token的Claims中必须包含Expires
+                       // RequireExpirationTime = true,
+                       // 允许的服务器时间偏移量
+                       // ClockSkew = TimeSpan.FromSeconds(300),
+                       // 是否验证Token有效期，使用当前时间与Token的Claims中的NotBefore和Expires对比
+                       // ValidateLifetime = true
+                   };
+               });
+
+            #endregion
+
+            #region We will Repository and Service Register to DI
+             
+            // transient scope singleton 三者的区别
+
+            services.AddTransient<ISeckillGoodsService, SeckillGoodsService>();
+            services.AddTransient<ISeckillGoodsRepository, SeckillGoodsRepository>();
+
+            #endregion
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,10 +105,7 @@ namespace SecKill
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            // 2.使用IdentityServer 中间件
-            app.UseIdentityServer();
-
-            // 启用认证
+            // 启用身份认证
             app.UseAuthentication();
 
             app.UseMvc(routes =>

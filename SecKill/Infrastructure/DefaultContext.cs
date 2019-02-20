@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -10,6 +12,15 @@ namespace SecKill.Infrastructure
     /// </summary>
     public class DefaultContext : DbContext
     {
+        /// <summary>
+        ///  日志工厂
+        /// </summary>
+        public static readonly LoggerFactory MyLoggerFactory
+        = new LoggerFactory(new[] {
+             new ConsoleLoggerProvider((category, level)  => 
+               category == DbLoggerCategory.Database.Command.Name
+               && level == LogLevel.Information, true)
+        });
 
         public DefaultContext(DbContextOptions options)
             : base(options)
@@ -29,6 +40,12 @@ namespace SecKill.Infrastructure
                 dynamic config = Activator.CreateInstance(configType);
                 modelBuilder.ApplyConfiguration(config);
             }
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLoggerFactory(MyLoggerFactory);
+            base.OnConfiguring(optionsBuilder);
         }
 
         /// <summary>

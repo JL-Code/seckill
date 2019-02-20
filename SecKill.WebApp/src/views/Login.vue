@@ -1,10 +1,10 @@
 <template>
   <div style="width:400px;margin:50px auto;">
-    <el-form label-width="80px" label-position="top">
-      <el-form-item label="用户名">
-        <el-input v-model="form.userName"></el-input>
+    <el-form :model="form" :rules="rules" ref="form" label-width="80px" label-position="left">
+      <el-form-item label="账号" prop="account">
+        <el-input v-model="form.account"></el-input>
       </el-form-item>
-      <el-form-item label="密码">
+      <el-form-item label="密码" prop="password">
         <el-input type="password" v-model="form.password"></el-input>
       </el-form-item>
       <el-form-item>
@@ -21,18 +21,47 @@ export default {
   data() {
     return {
       form: {
-        userName: "",
-        password: ""
+        account: "jiangy",
+        password: "1"
+      },
+      rules: {
+        account: [
+          {
+            required: true,
+            message: "请输入账号"
+          }
+        ],
+        password: [
+          {
+            required: true,
+            message: "请输入密码"
+          }
+        ]
       }
     };
   },
   methods: {
     submitForm() {
-      Cookies.set("identity", {
-        userName: this.form.userName,
-        password: this.form.password
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          this.$http({
+            url: "/api/account",
+            method: "post",
+            data: this.form
+          })
+            .then(res => {
+              Cookies.set("identity", res);
+              this.$router.push({ name: "home" });
+            })
+            .catch(({ data }) => {
+              alert(data.title);
+              console.log(data);
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
       });
-      this.$router.push({ name: "home" });
     }
   }
 };
