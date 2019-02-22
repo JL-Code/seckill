@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using MySql.Data.EntityFrameworkCore.Extensions;
 using SecKill.Application.Services;
 using SecKill.Domain.AggregatesModel;
 using SecKill.Domain.SeedWork;
@@ -37,7 +38,7 @@ namespace SecKill
             });
 
             // 通过依赖注入注册数据库上下文
-            services.AddCustomDbContext(Configuration);
+            services.AddSqlServerDbContext(Configuration).AddMySQLDbContext(Configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             #region 添加 Jwt token Authentication 认证方案
@@ -76,7 +77,7 @@ namespace SecKill
             #endregion
 
             #region We will Repository and Service Register to DI
-             
+
             // transient scope singleton 三者的区别
 
             services.AddTransient<ISeckillGoodsService, SeckillGoodsService>();
@@ -130,7 +131,7 @@ namespace SecKill
         /// <param name="services"></param>
         /// <param name="configuration"></param>
         /// <returns></returns>
-        public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddSqlServerDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             var connstr = configuration.GetConnectionString("DefaultConnection");
             services.AddEntityFrameworkSqlServer()
@@ -141,7 +142,22 @@ namespace SecKill
                            sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                        });
                    },
-                       ServiceLifetime.Scoped  //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
+                       //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
+                       ServiceLifetime.Scoped
+                   );
+            return services;
+        }
+
+        public static IServiceCollection AddMySQLDbContext(this IServiceCollection services, IConfiguration configuration)
+        {
+            var connstr = configuration.GetConnectionString("MySQLConnection");
+            services.AddEntityFrameworkMySQL()
+                   .AddDbContext<MysqlDbContext>(options =>
+                   {
+                       options.UseMySQL(connstr);
+                   },
+                       //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
+                       ServiceLifetime.Scoped
                    );
             return services;
         }

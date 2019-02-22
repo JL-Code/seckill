@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SecKill.Domain.AggregatesModel;
 using System;
@@ -9,6 +9,8 @@ namespace SecKill.Infrastructure.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<SeckillGoods> builder)
         {
+            // TODO: 如何同时为 SqlServer 和 MySql 两种数据库配置列
+
             builder.HasKey(m => m.SeckillGoodsId);
             builder.ToTable("SeckillGoods").HasData(new SeckillGoods
             {
