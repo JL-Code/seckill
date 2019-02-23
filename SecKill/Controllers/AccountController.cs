@@ -45,13 +45,13 @@ namespace SecKill.Controllers
 
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var authTime = DateTime.UtcNow;
-            var expiresAt = authTime.AddMinutes(10);
+            var expiresAt = authTime.AddDays(30);
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 // 身份卡
                 Subject = new ClaimsIdentity(new Claim[] {
-                    new Claim ("aud","http://localhost:8080"), // aud
-                    new Claim ("iss","http://localhost:8080"), // iss
+                    new Claim ("aud"," http://192.168.31.110:8082"), // aud
+                    new Claim ("iss"," http://192.168.31.110:8082"), // iss
                     new Claim ("name",user.UserName), // name
                     new Claim ("id",user.UserId.ToString())
                 }),

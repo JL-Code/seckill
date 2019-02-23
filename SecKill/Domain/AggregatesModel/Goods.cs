@@ -19,6 +19,6 @@ namespace SecKill.Domain.AggregatesModel
         /// </summary>
         public int StockCount { get; set; }
 
-        public string Img { get; set; }
+        public string PictureUrl { get; set; }
     }
 }

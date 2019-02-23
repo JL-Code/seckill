@@ -26,7 +26,7 @@ namespace SecKill.Migrations
 
                     b.Property<string>("GoodsName");
 
-                    b.Property<string>("Img");
+                    b.Property<string>("PictureUrl");
 
                     b.Property<double>("Price");
 
@@ -41,7 +41,7 @@ namespace SecKill.Migrations
                         {
                             GoodsId = new Guid("b266ade2-ff83-44d3-aa60-128ab17dbf43"),
                             GoodsName = "华为（HUAWEI） mate20pro手机 馥蕾红 8G+256G 全网通（UD屏内指纹版）",
-                            Img = "https://res.vmallres.com/pimages//product/6901443281213/800_800_1546486249080mp.png",
+                            PictureUrl = "https://res.vmallres.com/pimages//product/6901443281213/800_800_1546486249080mp.png",
                             Price = 5999.0,
                             StockCount = 10
                         });
@@ -58,7 +58,7 @@ namespace SecKill.Migrations
 
                     b.Property<string>("GoodsName");
 
-                    b.Property<string>("Img");
+                    b.Property<string>("PictureUrl");
 
                     b.Property<int>("Quantity");
 
@@ -73,14 +73,14 @@ namespace SecKill.Migrations
                     b.HasData(
                         new
                         {
-                            SeckillGoodsId = new Guid("a17fb06a-d4b7-454a-ac7a-b73c769ed113"),
-                            EndDate = new DateTime(2019, 2, 21, 0, 42, 49, 113, DateTimeKind.Local).AddTicks(6527),
+                            SeckillGoodsId = new Guid("dd1669dc-c714-4da5-9e3a-da3d862999d0"),
+                            EndDate = new DateTime(2019, 2, 23, 22, 23, 14, 686, DateTimeKind.Local).AddTicks(7247),
                             GoodsId = new Guid("b266ade2-ff83-44d3-aa60-128ab17dbf43"),
                             GoodsName = "华为（HUAWEI） mate20pro手机 馥蕾红 8G+256G 全网通（UD屏内指纹版）",
-                            Img = "https://res.vmallres.com/pimages//product/6901443281213/800_800_1546486249080mp.png",
+                            PictureUrl = "https://res.vmallres.com/pimages//product/6901443281213/800_800_1546486249080mp.png",
                             Quantity = 10,
                             SeckillPrice = 9.9000000000000004,
-                            StartDate = new DateTime(2019, 2, 20, 23, 42, 49, 114, DateTimeKind.Local).AddTicks(9721)
+                            StartDate = new DateTime(2019, 2, 23, 21, 23, 14, 688, DateTimeKind.Local).AddTicks(552)
                         });
                 });
 
@@ -91,15 +91,23 @@ namespace SecKill.Migrations
 
                     b.Property<string>("Address");
 
+                    b.Property<Guid>("GoodsId");
+
                     b.Property<string>("GoodsName");
 
                     b.Property<double>("GoodsPrice");
 
                     b.Property<DateTime>("OrderDate");
 
+                    b.Property<string>("OrderNumber");
+
                     b.Property<int>("OrderState");
 
                     b.Property<string>("PaymentTerms");
+
+                    b.Property<int>("Quantity");
+
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("OrderId");
 
@@ -126,7 +134,7 @@ namespace SecKill.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("b4d7e62d-3a46-4a56-85bb-dc0d31f2b610"),
+                            UserId = new Guid("e205e0f7-4b9c-4f9a-a554-ac3df63af6e1"),
                             Address = "长江国际",
                             Password = "1",
                             UserName = "jiangy"

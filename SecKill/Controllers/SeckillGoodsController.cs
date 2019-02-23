@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SecKill.Application.Models;
 using SecKill.Application.Services;
+using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,6 +14,7 @@ namespace SecKill.Controllers
     public class SeckillGoodsController : Controller
     {
         private readonly ISeckillGoodsService _seckillGoodsService;
+
 
         public SeckillGoodsController(ISeckillGoodsService seckillGoodsService)
         {
@@ -29,12 +29,6 @@ namespace SecKill.Controllers
             return data;
         }
 
-        [Authorize]
-        [HttpPost]
-        public IActionResult Post()
-        {
-            return Ok();
-        }
 
     }
 }

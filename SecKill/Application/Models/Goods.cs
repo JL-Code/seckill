@@ -8,7 +8,7 @@ namespace SecKill.Application.Models
 
         public string GoodsName { get; set; }
 
-        public string Img { get; set; }
+        public string PictureUrl { get; set; }
     }
 
     public class Goods : GoodsBase

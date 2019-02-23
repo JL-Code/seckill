@@ -52,6 +52,8 @@ namespace SecKill.Domain.SeedWork
         /// <returns></returns>
         T Get(object id);
 
+        T Get(Expression<Func<T, bool>> predicate);
+
         /// <summary>
         /// 异步获取实体
         /// </summary>

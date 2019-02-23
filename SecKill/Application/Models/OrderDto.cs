@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using SecKill.Domain.AggregatesModel;
+using System;
 
 namespace SecKill.Application.Models
 {
@@ -15,7 +13,7 @@ namespace SecKill.Application.Models
         /// <summary>
         /// 订单状态
         /// </summary>
-        public string OrderState { get; set; }
+        public OrderState OrderState { get; set; }
 
         public DateTime OrderDate { get; set; }
 
@@ -35,5 +33,7 @@ namespace SecKill.Application.Models
         /// 简单的收货地址
         /// </summary>
         public string Address { get; set; }
+
+        public SeckillGoods Goods { get; set; }
     }
 }

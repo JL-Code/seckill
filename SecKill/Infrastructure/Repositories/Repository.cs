@@ -27,6 +27,11 @@ namespace SecKill.Infrastructure.Repositories
             return _dbContext.Find<T>(id);
         }
 
+        public T Get(Expression<Func<T, bool>> predicate)
+        {
+            return  _dbContext.Set<T>().FirstOrDefault(predicate);
+        }
+
         public async Task<T> GetAsync(object id)
         {
             return await _dbContext.FindAsync<T>(id);

@@ -11,6 +11,11 @@ namespace SecKill.Domain.AggregatesModel
         public Guid OrderId { get; set; }
 
         /// <summary>
+        /// 订单号
+        /// </summary>
+        public string OrderNumber { get; set; }
+
+        /// <summary>
         /// 订单状态
         /// </summary>
         public OrderState OrderState { get; set; }
@@ -33,15 +38,19 @@ namespace SecKill.Domain.AggregatesModel
         /// 简单的收货地址
         /// </summary>
         public string Address { get; set; }
+
+        public Guid UserId { get; set; }
     }
 
     public enum OrderState
     {
+        Draft = 0,
+
         // 未支付
-        UnPaid = 0,
+        UnPaid = 1,
 
         // 已支付
-        Paid = 1,
+        Paid = 2,
 
         // 订单关闭
         Closed = 99

@@ -14,7 +14,7 @@ namespace SecKill.Infrastructure.EntityConfigurations
             {
                 GoodsId = new Guid("B266ADE2-FF83-44D3-AA60-128AB17DBF43"),
                 GoodsName = "华为（HUAWEI） mate20pro手机 馥蕾红 8G+256G 全网通（UD屏内指纹版）",
-                Img = "https://res.vmallres.com/pimages//product/6901443281213/800_800_1546486249080mp.png",
+                PictureUrl = "https://res.vmallres.com/pimages//product/6901443281213/800_800_1546486249080mp.png",
                 Price = 5999.0,
                 StockCount = 10
             });

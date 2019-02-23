@@ -16,24 +16,18 @@ namespace SecKill.Application.Services
             _seckillGoodsService = seckillGoodsService;
         }
 
-        public OrderDto CreateOrder(OrderDto orderDto)
+        public SeckillOrder GetSeckillOrderBy(Guid userId, Guid goodsId)
         {
-            var success = _seckillGoodsService.DeductInventory(orderDto.GoodsId, orderDto.Quantity);
+            var order = _repository.Get(m => m.UserId == userId && m.GoodsId == goodsId);
+            return order;
+        }
+
+        public void TryCreateOrder(SeckillOrder order)
+        {
+            var success = _seckillGoodsService.DeductInventory(order.GoodsId, order.Quantity);
             if (!success)
                 throw new BusinessException("扣减库存失败");
-            var order = new SeckillOrder()
-            {
-                OrderId = Guid.NewGuid(),
-                OrderDate = DateTime.Now,
-                OrderState = OrderState.UnPaid,
-                GoodsId = orderDto.GoodsId,
-                GoodsName = orderDto.GoodsName,
-                GoodsPrice = orderDto.GoodsPrice,
-                PaymentTerms = orderDto.PaymentTerms,
-                Address = orderDto.Address
-            };
             _repository.Add(order);
-            return new OrderDto();
         }
     }
 }

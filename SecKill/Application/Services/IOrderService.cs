@@ -1,18 +1,18 @@
 ﻿using SecKill.Application.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using SecKill.Domain.AggregatesModel;
+using System;
 
 namespace SecKill.Application.Services
 {
     public interface IOrderService
     {
+
+        SeckillOrder GetSeckillOrderBy(Guid userId, Guid goodsId);
+
         /// <summary>
-        /// 创建订单
+        /// 尝试创建订单
         /// </summary>
         /// <param name="order"></param>
-        /// <returns></returns>
-        OrderDto CreateOrder(OrderDto order);
-
+        void TryCreateOrder(SeckillOrder order);
     }
 }

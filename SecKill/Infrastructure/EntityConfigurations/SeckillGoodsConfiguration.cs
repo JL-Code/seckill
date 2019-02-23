@@ -18,7 +18,7 @@ namespace SecKill.Infrastructure.EntityConfigurations
                 GoodsName = "华为（HUAWEI） mate20pro手机 馥蕾红 8G+256G 全网通（UD屏内指纹版）",
                 EndDate = DateTime.Now.AddMinutes(60),
                 StartDate = DateTime.Now,
-                Img = "https://res.vmallres.com/pimages//product/6901443281213/800_800_1546486249080mp.png",
+                PictureUrl = "https://res.vmallres.com/pimages//product/6901443281213/800_800_1546486249080mp.png",
                 Quantity = 10,
                 SeckillGoodsId = Guid.NewGuid(),
                 SeckillPrice = 9.9

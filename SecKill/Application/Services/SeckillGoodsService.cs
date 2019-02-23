@@ -15,6 +15,16 @@ namespace SecKill.Application.Services
             _repository = repository;
         }
 
+        public bool CanDeductInventory(Guid goodsId, int quantity)
+        {
+            var goods = _repository.Get(m => m.GoodsId == goodsId);
+            if (goods == null)
+                return false;
+            if (goods.Quantity - quantity < 0)
+                return false;
+            return true;
+        }
+
         /// <summary>
         /// 减库存
         /// </summary>
@@ -23,14 +33,19 @@ namespace SecKill.Application.Services
         /// <returns></returns>
         public bool DeductInventory(Guid goodsId, int quantity)
         {
-            var goods = _repository.Get(goodsId);
-            if (goods == null)
-                return false;
-            if (goods.Quantity - quantity < 0)
-                return false;
-            goods.Quantity -= quantity;
-            _repository.Update(goods);
-            return true;
+            var goods = _repository.Get(m => m.GoodsId == goodsId);
+            if (CanDeductInventory(goodsId, quantity))
+            {
+                goods.Quantity -= quantity;
+                _repository.Update(goods);
+                return true;
+            }
+            return false;
+        }
+
+        public SeckillGoods GetById(Guid id)
+        {
+            return _repository.Get(id);
         }
 
         public List<SeckillGoodsDto> ListSeckillGoods()
@@ -45,7 +60,7 @@ namespace SecKill.Application.Services
                 SeckillGoodsId = entity.SeckillGoodsId,
                 StartDate = entity.StartDate,
                 SeckillPrice = entity.SeckillPrice,
-                Img = entity.Img
+                PictureUrl = entity.PictureUrl
             }).ToList();
         }
     }
