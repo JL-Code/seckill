@@ -8,9 +8,8 @@
       </el-col>
     </el-row>
     <seckill-goods :data="seckillGoods"></seckill-goods>
-    <el-button @click="test">测试</el-button>
-    <el-button @click="getTestResult">获取值</el-button>
     <el-button @click="validateAccessToken">验证AccessToken</el-button>
+    <el-button @click="redirectOrders">订单中心</el-button>
   </div>
 </template>
 
@@ -45,12 +44,19 @@ export default {
   },
   methods: {
     fetchData() {
+      const loading = this.$loading({
+        lock: true,
+        text: "正在加载商品数据...",
+        spinner: "el-icon-loading"
+      });
       this.$http
         .get("/api/seckillgoods")
         .then(data => {
+          loading.close();
           this.seckillGoods = data;
         })
         .catch(err => {
+          loading.close();
           alert(err.message);
         });
     },
@@ -66,6 +72,9 @@ export default {
       this.$http.get("/api/values").then(data => {
         alert(data);
       });
+    },
+    redirectOrders() {
+      this.$router.push({ name: "orders" });
     }
   }
 };

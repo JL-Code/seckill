@@ -15,42 +15,35 @@
       </el-col>
     </el-row>
     <!-- 商品界面 -->
-    <el-row class="goods-view">
+    <el-row class="goods-view" v-if="currentGoods">
       <el-col>
         <el-card shadow="hover">
-          <img :src="goods.img" style="width:100px;height:100px">
+          <img :src="currentGoods.pictureUrl" style="width:100px;height:100px">
           <div style="padding: 14px;">
-            <span>{{ goods.goodsName }}</span>
+            <span>{{ currentGoods.goodsName }}</span>
             <div class="bottom clearfix">
               <time class="time"></time>
               <span>结算金额：</span>
-              <span class="price">￥{{goods.price}}</span>
+              <span class="price">￥{{currentGoods.goodsPrice}}</span>
             </div>
           </div>
         </el-card>
       </el-col>
     </el-row>
     <el-row style="text-align:right;">
-      <el-button type="primary" @click="submitOrder">提交订单</el-button>
+      <!-- <el-button type="danger">删除订单</el-button> -->
+      <el-button type="primary" :loading="loading" @click="submitOrder">提交订单</el-button>
     </el-row>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "Order",
   data() {
     return {
-      goods: {
-        img:
-          "https://res.vmallres.com/pimages//product/6901443281213/800_800_1546486249080mp.png",
-        goodsName:
-          "华为（HUAWEI） mate20pro手机 馥蕾红 8G+256G 全网通（UD屏内指纹版）",
-        price: 1.09,
-        startDate: "2019-02-10 20:43:00",
-        endDate: "2019-02-11 00:00:00",
-        status: ""
-      },
+      loading: false,
       orderAddress: {
         // 收货人
         consignee: "蒋勇",
@@ -60,10 +53,45 @@ export default {
       }
     };
   },
+  computed: {
+    ...mapState(["currentGoods"])
+  },
+  mounted() {
+    if (this.currentGoods == null) {
+      this.$router.push({ name: "home" });
+    }
+  },
   methods: {
     submitOrder() {
+      const loading = this.$loading({
+        lock: true,
+        text: "正在提交订单...",
+        spinner: "el-icon-loading"
+      });
+      this.loading = true;
+      var order = {
+        orderId: this.$route.query.orderId,
+        goodsId: this.currentGoods.goodsId,
+        goodsName: this.currentGoods.goodsName,
+        goodsPrice: this.currentGoods.goodsPrice,
+        quantity: this.currentGoods.quantity,
+        address: `${this.orderAddress.consignee}${this.orderAddress.mobile}${
+          this.orderAddress.address
+        }${this.orderAddress.addressDetail}`
+      };
       // 成功后调整支付界面
-      this.$router.push({ name: "payment" });
+      this.$http
+        .post("/api/order", order)
+        .then(res => {
+          loading.close();
+          this.$store.commit("SUBMIT_ORDER_SUCCESS", res);
+          this.$router.push({ name: "payment" });
+        })
+        .catch(err => {
+          this.loading = false;
+          loading.close();
+          err.message && alert(err.message);
+        });
     }
   }
 };

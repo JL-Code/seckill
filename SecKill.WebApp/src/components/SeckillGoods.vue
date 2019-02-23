@@ -2,7 +2,7 @@
   <el-row :gutter="10">
     <el-col :span="6" v-for="(goods, index) in data" :key="index">
       <el-card :body-style="{ padding: '0px' }">
-        <img :src="goods.img" class="image">
+        <img :src="goods.pictureUrl" class="image">
         <div style="padding: 14px;">
           <span>{{ goods.goodsName }}</span>
           <div class="bottom clearfix">
@@ -12,8 +12,9 @@
             <el-button
               type="text"
               :disabled="disabled"
+              :loading="loading"
               class="button"
-              @click="seckill"
+              @click="seckill(goods)"
             >{{actionName}}</el-button>
           </div>
         </div>
@@ -33,7 +34,8 @@ export default {
     return {
       duration: 0,
       actionName: "即将开始",
-      disabled: true
+      disabled: true,
+      loading: false
     };
   },
   computed: {
@@ -71,8 +73,37 @@ export default {
       this.disabled = false;
       this.actionName = "立即秒杀";
     },
-    seckill() {
-      this.$router.push({ name: "order" });
+    seckill(goods) {
+      this.loading = true;
+      const loading = this.$loading({
+        lock: true,
+        text: "加载中...",
+        spinner: "el-icon-loading"
+      });
+      this.$http
+        .post("/api/order/draft", {
+          goodsId: goods.goodsId,
+          goodsName: goods.goodsName,
+          goodsPrice: goods.seckillPrice,
+          quantity: 1
+        })
+        .then(res => {
+          loading.close();
+          this.$store.commit("SECKILL_GOODS", {
+            goodsId: goods.goodsId,
+            goodsName: goods.goodsName,
+            goodsPrice: goods.seckillPrice,
+            quantity: 1,
+            pictureUrl: goods.pictureUrl
+          });
+          this.$router.push({ name: "order", query: { orderId: res.orderId } });
+        })
+        .catch(err => {
+          this.loading = false;
+          loading.close();
+          err.message && alert(err.message);
+          console.log("seckill", err);
+        });
     }
   },
   mounted() {

@@ -8,7 +8,12 @@
         <el-input type="password" v-model="form.password"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm">立即登录</el-button>
+        <el-button
+          type="primary"
+          @click="submitForm"
+          :loading="loading"
+          :disabled="loading"
+        >{{displayName}}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -20,6 +25,7 @@ export default {
   name: "Login",
   data() {
     return {
+      loading: false,
       form: {
         account: "jiangy",
         password: "1"
@@ -40,10 +46,16 @@ export default {
       }
     };
   },
+  computed: {
+    displayName() {
+      return this.loading ? "登录中..." : "立即登录";
+    }
+  },
   methods: {
     submitForm() {
       this.$refs.form.validate(valid => {
         if (valid) {
+          this.loading = true;
           this.$http({
             url: "/api/account",
             method: "post",
@@ -54,6 +66,7 @@ export default {
               this.$router.push({ name: "home" });
             })
             .catch(({ data }) => {
+              this.loading = false;
               alert(data.title);
               console.log(data);
             });
