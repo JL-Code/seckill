@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SecKill.Application.Models;
+using NLog;
 using SecKill.Application.Services;
 using SecKill.Domain.AggregatesModel;
 using SecKill.Domain.SeedWork;
 using SecKill.Infrastructure;
+using SecKill.Infrastructure.Utils;
 using SecKill.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace SecKill.Controllers
 {
@@ -14,15 +16,18 @@ namespace SecKill.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
+        private readonly static ILogger logger = LogManager.GetCurrentClassLogger();
+        private readonly RedisManager _redisManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IOrderService _orderService;
         private readonly ISeckillGoodsService _seckillGoodsService;
 
-        public OrderController(IUnitOfWork unitOfWork, IOrderService orderService, ISeckillGoodsService seckillGoodsService)
+        public OrderController(IUnitOfWork unitOfWork, IOrderService orderService, ISeckillGoodsService seckillGoodsService, RedisManager redisManager)
         {
             _unitOfWork = unitOfWork;
             _orderService = orderService;
             _seckillGoodsService = seckillGoodsService;
+            _redisManager = redisManager;
         }
 
         /// <summary>
@@ -62,17 +67,23 @@ namespace SecKill.Controllers
                 if (existingOrder != null)
                 {
                     // refs:https://www.restapitutorial.com/httpstatuscodes.html
-                    return StatusCode(409, CodeMessage.CONNNOT_REPEAT_SECKILL_GOODS);
+                    return StatusCode(200, CodeMessage.CONNNOT_REPEAT_SECKILL_GOODS);
                 }
-                _orderService.TryCreateOrder(order);
+                _orderService.TryCreateOrder(order, out CodeMessage message);
+                if (message.HasError)
+                {
+                    return Ok(message);
+                }
                 _unitOfWork.Commit();
-                return Ok(new {
+                return Ok(new
+                {
                     orderNumber = order.OrderNumber,
                     goodsPrice = order.GoodsPrice
                 });
             }
             catch (Exception ex)
             {
+                logger.Error(ex, $"订单创建失败：{ex.Message}");
                 _unitOfWork.Rollback();
                 return StatusCode(500, new
                 {
@@ -89,27 +100,32 @@ namespace SecKill.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpPost("draft")]
-        public IActionResult CreateDraft(OrderDraftViewModel orderDraft)
+        public async Task<IActionResult> CreateDraft(OrderDraftViewModel orderDraft)
         {
             try
             {
                 var userInfo = User.Identity.ToUserInfo();
                 // 1. 判断是否重复秒杀 2.判断商品是否还有库存
-                var existingOrder = _orderService.GetSeckillOrderBy(userInfo.UserId, orderDraft.GoodsId.GetValueOrDefault());
+                var existingOrder = await _orderService.GetSeckillOrderByAsync(userInfo.UserId, orderDraft.GoodsId.GetValueOrDefault());
+
                 if (existingOrder != null)
                 {
-                    return StatusCode(500, CodeMessage.CONNNOT_REPEAT_SECKILL_GOODS);
+                    return StatusCode(200, CodeMessage.CONNNOT_REPEAT_SECKILL_GOODS);
                 }
 
-                if (!_seckillGoodsService.CanDeductInventory(orderDraft.GoodsId.GetValueOrDefault(), 1))
+                if (!await _seckillGoodsService.CanDeductInventoryAsync(orderDraft.GoodsId.GetValueOrDefault(), 1))
                 {
-                    return StatusCode(500, CodeMessage.GOODS_SOLD_OUT);
+                    return StatusCode(200, CodeMessage.GOODS_SOLD_OUT);
                 }
+
                 orderDraft.OrderId = Guid.NewGuid();
+                var key = "uid_" + userInfo.UserId.ToString() + "_gid_" + orderDraft.GoodsId.ToString();
+                await _redisManager.RedisDb.StringSetAsync(key, JsonUtil.Serialize(orderDraft));
                 return Ok(orderDraft);
             }
             catch (Exception ex)
             {
+                logger.Error(ex, $"订单草稿创建失败：{ex.Message}");
                 return StatusCode(500, new
                 {
                     code = 500,

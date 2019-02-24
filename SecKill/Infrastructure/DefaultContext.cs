@@ -44,7 +44,7 @@ namespace SecKill.Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseLoggerFactory(MyLoggerFactory);
+            //optionsBuilder.UseLoggerFactory(MyLoggerFactory);
             base.OnConfiguring(optionsBuilder);
         }
 

@@ -28,7 +28,7 @@ namespace SecKill.Models
         [Required]
         public Guid? GoodsId { get; set; }
 
-        public Guid OrderId { get; set; }
+        public Guid? OrderId { get; set; }
 
         public string GoodsName { get; set; }
 

@@ -38,7 +38,8 @@ namespace SecKill
             });
 
             // 通过依赖注入注册数据库上下文
-            services.AddSqlServerDbContext(Configuration).AddMySQLDbContext(Configuration);
+            //services.AddSqlServerDbContext(Configuration).AddMySQLDbContext(Configuration);
+            services.AddSqlServerDbContext(Configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             #region 添加 Jwt token Authentication 认证方案
@@ -85,6 +86,7 @@ namespace SecKill
             services.AddTransient<ISeckillGoodsRepository, SeckillGoodsRepository>();
             services.AddTransient<ISecKillOrderRepository, SecKillOrderRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddSingleton(new RedisManager("localhost"));
 
             #endregion
 

@@ -20,3 +20,4 @@
 ## 项目依赖
 
 1. OpenId 认证 Microsoft.AspNetCore.Authentication.OpenIdConnect
+2. [StackExchange.Redis 开源免费的Redis C# 客户端](https://stackexchange.github.io/StackExchange.Redis/) 

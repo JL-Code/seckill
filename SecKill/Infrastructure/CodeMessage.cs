@@ -30,5 +30,9 @@
             Message = message;
         }
 
+        /// <summary>
+        /// 含有错误
+        /// </summary>
+        public bool HasError { get => Code != 0; }
     }
 }
