@@ -16,6 +16,8 @@ namespace SecKill.Application.Services
         private readonly RedisManager _redisManager;
         private readonly ISeckillGoodsRepository _repository;
 
+        const string SeckillGoods_Key = "seckillgoods_key";
+
         public SeckillGoodsService(ISeckillGoodsRepository repository, RedisManager redisManager)
         {
             _repository = repository;
@@ -33,7 +35,7 @@ namespace SecKill.Application.Services
             var goods = await GetByGoodsIdAsync(goodsId);
             if (goods == null)
                 return false;
-            if (goods.Quantity - quantity < 0)
+            if (goods.StockCount - quantity < 0)
                 return false;
             return true;
         }
@@ -43,7 +45,7 @@ namespace SecKill.Application.Services
         {
             if (goods == null)
                 return false;
-            if (goods.Quantity - quantity < 0)
+            if (goods.StockCount - quantity < 0)
                 return false;
             return true;
         }
@@ -59,7 +61,7 @@ namespace SecKill.Application.Services
             var goods = GetByGoodsId(goodsId);
             if (CanDeductInventory(goodsId, quantity))
             {
-                goods.Quantity -= quantity;
+                goods.StockCount -= quantity;
                 _repository.Update(goods);
                 return true;
             }
@@ -98,12 +100,14 @@ namespace SecKill.Application.Services
 
         public List<SeckillGoodsDto> ListSeckillGoods()
         {
+
             var entities = _repository.ListEntities().ToList();
+
             return entities.Select(entity => new SeckillGoodsDto
             {
                 GoodsId = entity.GoodsId,
                 GoodsName = entity.GoodsName,
-                Quantity = entity.Quantity,
+                StockCount = entity.StockCount,
                 EndDate = entity.EndDate,
                 SeckillGoodsId = entity.SeckillGoodsId,
                 StartDate = entity.StartDate,
@@ -112,7 +116,27 @@ namespace SecKill.Application.Services
             }).ToList();
         }
 
-
+        public async Task<List<SeckillGoodsDto>> ListSeckillGoodsAsync()
+        {
+           
+            var value = await _redisManager.RedisDb.StringGetAsync(SeckillGoods_Key);
+            if (!value.IsNullOrEmpty)
+                return JsonUtil.Deserialize<List<SeckillGoodsDto>>(value);
+            var entities = await _repository.ListEntitiesAsync().ToList();
+            var dtos = entities.Select(entity => new SeckillGoodsDto
+            {
+                GoodsId = entity.GoodsId,
+                GoodsName = entity.GoodsName,
+                StockCount = entity.StockCount,
+                EndDate = entity.EndDate,
+                SeckillGoodsId = entity.SeckillGoodsId,
+                StartDate = entity.StartDate,
+                SeckillPrice = entity.SeckillPrice,
+                PictureUrl = entity.PictureUrl
+            }).ToList();
+            await _redisManager.RedisDb.StringSetAsync(SeckillGoods_Key, JsonUtil.Serialize(dtos));
+            return dtos;
+        }
 
     }
 }

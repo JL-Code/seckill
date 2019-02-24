@@ -2,6 +2,7 @@
 using SecKill.Application.Models;
 using SecKill.Application.Services;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,11 +22,12 @@ namespace SecKill.Controllers
             _seckillGoodsService = seckillGoodsService;
         }
 
-        // GET: api/<controller>
+        // GET: api/<controller>  
         [HttpGet]
-        public IEnumerable<SeckillGoodsDto> Get()
+        public async Task<IEnumerable<SeckillGoodsDto>> GetAsync()
         {
-            var data = _seckillGoodsService.ListSeckillGoods();
+            // 缓存优化
+            var data = await _seckillGoodsService.ListSeckillGoodsAsync();
             return data;
         }
 

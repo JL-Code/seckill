@@ -75,6 +75,12 @@ namespace SecKill.Domain.SeedWork
         IEnumerable<T> ListEntities();
 
         /// <summary>
+        /// 获取实体集合
+        /// </summary>
+        /// <returns></returns>
+        IAsyncEnumerable<T> ListEntitiesAsync();
+
+        /// <summary>
         /// 原始sql查询
         /// </summary>
         /// <param name="sqlstr">sql语句</param>

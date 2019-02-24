@@ -6,7 +6,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecKill", "SecKill\SecKill.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Seckill.Identity", "Seckill.Identity\Seckill.Identity.csproj", "{17658A92-E82D-4660-B34E-D7D758FAB58A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecKill.Test", "SecKill.Test\SecKill.Test.csproj", "{974358B8-170D-4247-8B20-94B8BBA94736}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecKill.Test", "SecKill.Test\SecKill.Test.csproj", "{974358B8-170D-4247-8B20-94B8BBA94736}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RabbitmqClientLab", "RabbitmqClientLab", "{241D844F-8000-4A7A-B456-B9699DACD588}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbitmq.Publisher", "RabbitmqClientLab\Rabbitmq.Publisher\Rabbitmq.Publisher.csproj", "{C07ECB0F-4573-4C23-9D4B-5D7E7BCA73A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbitmq.Consumer", "RabbitmqClientLab\Rabbitmq.Consumer\Rabbitmq.Consumer.csproj", "{C7E99D50-8186-48C2-9B7A-0E43ED9B6821}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,9 +32,21 @@ Global
 		{974358B8-170D-4247-8B20-94B8BBA94736}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{974358B8-170D-4247-8B20-94B8BBA94736}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{974358B8-170D-4247-8B20-94B8BBA94736}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C07ECB0F-4573-4C23-9D4B-5D7E7BCA73A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C07ECB0F-4573-4C23-9D4B-5D7E7BCA73A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C07ECB0F-4573-4C23-9D4B-5D7E7BCA73A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C07ECB0F-4573-4C23-9D4B-5D7E7BCA73A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7E99D50-8186-48C2-9B7A-0E43ED9B6821}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7E99D50-8186-48C2-9B7A-0E43ED9B6821}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7E99D50-8186-48C2-9B7A-0E43ED9B6821}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7E99D50-8186-48C2-9B7A-0E43ED9B6821}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C07ECB0F-4573-4C23-9D4B-5D7E7BCA73A1} = {241D844F-8000-4A7A-B456-B9699DACD588}
+		{C7E99D50-8186-48C2-9B7A-0E43ED9B6821} = {241D844F-8000-4A7A-B456-B9699DACD588}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {950CE863-BFD8-41E3-B446-8D5917A8FA19}

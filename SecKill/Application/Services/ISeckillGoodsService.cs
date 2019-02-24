@@ -14,6 +14,8 @@ namespace SecKill.Application.Services
 
         List<SeckillGoodsDto> ListSeckillGoods();
 
+        Task<List<SeckillGoodsDto>> ListSeckillGoodsAsync();
+
         /// <summary>
         /// 扣减库存
         /// </summary>

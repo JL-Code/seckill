@@ -9,6 +9,7 @@
             <time class="time"></time>
             <span>秒杀价：</span>
             <span class="price">￥{{goods.seckillPrice}}</span>
+            <div>库存数量：{{goods.stockCount}}</div>
             <el-button
               type="text"
               :disabled="disabled"

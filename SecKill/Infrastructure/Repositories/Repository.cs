@@ -29,7 +29,7 @@ namespace SecKill.Infrastructure.Repositories
 
         public T Get(Expression<Func<T, bool>> predicate)
         {
-            return  _dbContext.Set<T>().FirstOrDefault(predicate);
+            return _dbContext.Set<T>().FirstOrDefault(predicate);
         }
 
         public async Task<T> GetAsync(object id)
@@ -45,6 +45,11 @@ namespace SecKill.Infrastructure.Repositories
         public IEnumerable<T> ListEntities()
         {
             return _dbContext.Set<T>().AsNoTracking().AsEnumerable();
+        }
+
+        public IAsyncEnumerable<T> ListEntitiesAsync()
+        {
+            return _dbContext.Set<T>().AsNoTracking().ToAsyncEnumerable();
         }
 
         public void Remove(T entity)

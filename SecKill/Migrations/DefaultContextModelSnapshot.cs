@@ -60,11 +60,11 @@ namespace SecKill.Migrations
 
                     b.Property<string>("PictureUrl");
 
-                    b.Property<int>("Quantity");
-
                     b.Property<double>("SeckillPrice");
 
                     b.Property<DateTime>("StartDate");
+
+                    b.Property<int>("StockCount");
 
                     b.HasKey("SeckillGoodsId");
 
@@ -73,14 +73,14 @@ namespace SecKill.Migrations
                     b.HasData(
                         new
                         {
-                            SeckillGoodsId = new Guid("dd1669dc-c714-4da5-9e3a-da3d862999d0"),
-                            EndDate = new DateTime(2019, 2, 23, 22, 23, 14, 686, DateTimeKind.Local).AddTicks(7247),
+                            SeckillGoodsId = new Guid("a3bfcbed-da5a-48f8-9a24-95f533acaf5e"),
+                            EndDate = new DateTime(2019, 2, 24, 19, 34, 3, 378, DateTimeKind.Local).AddTicks(7471),
                             GoodsId = new Guid("b266ade2-ff83-44d3-aa60-128ab17dbf43"),
                             GoodsName = "华为（HUAWEI） mate20pro手机 馥蕾红 8G+256G 全网通（UD屏内指纹版）",
                             PictureUrl = "https://res.vmallres.com/pimages//product/6901443281213/800_800_1546486249080mp.png",
-                            Quantity = 10,
                             SeckillPrice = 9.9000000000000004,
-                            StartDate = new DateTime(2019, 2, 23, 21, 23, 14, 688, DateTimeKind.Local).AddTicks(552)
+                            StartDate = new DateTime(2019, 2, 24, 18, 34, 3, 380, DateTimeKind.Local).AddTicks(707),
+                            StockCount = 10
                         });
                 });
 
@@ -134,7 +134,7 @@ namespace SecKill.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("e205e0f7-4b9c-4f9a-a554-ac3df63af6e1"),
+                            UserId = new Guid("0838b2b9-62e2-4f96-9c59-0ad26714f466"),
                             Address = "长江国际",
                             Password = "1",
                             UserName = "jiangy"

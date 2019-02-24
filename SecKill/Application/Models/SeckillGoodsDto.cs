@@ -15,7 +15,6 @@ namespace SecKill.Application.Models
 
         public DateTime EndDate { get; set; }
 
-        public int Quantity { get; set; }
-
+        public int StockCount { get; set; }
     }
 }

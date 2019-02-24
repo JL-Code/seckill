@@ -19,7 +19,7 @@ namespace SecKill.Infrastructure.EntityConfigurations
                 EndDate = DateTime.Now.AddMinutes(60),
                 StartDate = DateTime.Now,
                 PictureUrl = "https://res.vmallres.com/pimages//product/6901443281213/800_800_1546486249080mp.png",
-                Quantity = 10,
+                StockCount = 10,
                 SeckillGoodsId = Guid.NewGuid(),
                 SeckillPrice = 9.9
             });

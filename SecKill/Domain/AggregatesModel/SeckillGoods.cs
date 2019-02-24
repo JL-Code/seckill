@@ -25,9 +25,9 @@ namespace SecKill.Domain.AggregatesModel
         public double SeckillPrice { get; set; }
 
         /// <summary>
-        /// 放出的秒杀数量
+        /// 秒杀商品库存
         /// </summary>
-        public int Quantity { get; set; }
+        public int StockCount { get; set; }
 
         public string PictureUrl { get; set; }
     }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.nlog-project.org/schemas/NLog.xsd NLog.xsd" autoReload="true" throwExceptions="false" internalLogLevel="Off" internalLogFile="c:\temp\nlog-internal.log">
+    <!-- optional, add some variables
+  https://github.com/nlog/NLog/wiki/Configuration-file#variables
+  -->
+    <variable name="logDirectory" value="${currentdir}/Logs" />
+    <!--
+  See https://github.com/nlog/nlog/wiki/Configuration-file
+  for information on customizing logging rules and outputs.
+   -->
+    <targets>
+        <!-- 定义输出模板：
+        type="File"：这个记录方式为文件类型
+        fileName="${logDirectory}/All.log"：表示输出到文件All.log中
+        layout="..."：输出文件中错误的显示格式
+        ${logDirectory}：为上述定义的路径
+        ${longdate}：输出长日期 yyyy-MM-dd HH:mm:ss.ffff(例:2013-01-31 14:49:21.2120)
+        ${level}：错误等级(由低到高为Trace，Debug，Info，Warn，Error，Fatal)
+        ${newline}：输出 新的一行
+        ${stacktrace}：输出 堆栈信息
+        ${callsite:className=True:fileName=True:includeSourcePath=True:methodName=True}：输出 命名空间.类名.方法名(文件路径:行号)
+        ${message}：输出错误信息-->
+        <target xsi:type="File" name="infoFile" fileName="${logDirectory}/${shortdate}.info.text" layout="${longdate} ${level} ${message} ${stacktrace}" encoding="utf-8" />
+        <target xsi:type="File" name="errorFile" fileName="${logDirectory}/${shortdate}.info.text" layout="${longdate} ${level} ${message} ${stacktrace}" encoding="utf-8" />
+        <!--
+    add your targets here
+    See https://github.com/nlog/NLog/wiki/Targets for possible targets.
+    See https://github.com/nlog/NLog/wiki/Layout-Renderers for the possible layout renderers.
+    -->
+        <!--
+    Write events to a file with the date in the filename.
+    <target xsi:type="File" name="f" fileName="${basedir}/logs/${shortdate}.log"
+            layout="${longdate} ${uppercase:${level}} ${message}" />
+    -->
+    </targets>
+    <rules>
+        <!-- add your logging rules here -->
+        <!--
+    Write all events with minimal level of Debug (So Debug, Info, Warn, Error and Fatal, but not Trace)  to "f"
+    <logger name="*" minlevel="Debug" writeTo="f" />
+    -->
+        <!-- 定义输出日志：
+        name="*"：记录所有信息
+        minlevel="Trace"：记录的最低错误级别为Trace
+        writeTo="logfiles"：日志写入logfiles的target中-->
+        <logger name="*" level="Info" writeTo="infoFile" />
+        <logger name="*" level="Error"  writeTo="errorFile" />
+    </rules>
+</nlog>
