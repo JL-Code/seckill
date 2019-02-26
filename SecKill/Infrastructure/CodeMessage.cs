@@ -8,7 +8,10 @@
     */
     public class CodeMessage
     {
-
+        /// <summary>
+        /// 不能重复秒杀商品
+        /// </summary>
+        public static CodeMessage IN_QUEUE { get; } = new CodeMessage(5000, "排队中");
 
         /// <summary>
         /// 不能重复秒杀商品

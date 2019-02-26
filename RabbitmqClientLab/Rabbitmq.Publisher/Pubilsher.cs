@@ -18,7 +18,7 @@ namespace Rabbitmq.Publisher
                 using (var channel = connection.CreateModel())
                 {
                     // 声明队列
-                    channel.QueueDeclare(queue: "hello",
+                    channel.QueueDeclare(queue: "routeKeyTest",
                                durable: false,
                                exclusive: false,
                                autoDelete: false,
@@ -31,7 +31,7 @@ namespace Rabbitmq.Publisher
                             message = Console.ReadLine();
                             var body = Encoding.UTF8.GetBytes(message);
                             channel.BasicPublish(exchange: "",
-                                                 routingKey: "hello",
+                                                 routingKey: "routeKeyTest",
                                                  basicProperties: null,
                                                  body: body);
                             Console.WriteLine(" [x] Sent {0}", message);

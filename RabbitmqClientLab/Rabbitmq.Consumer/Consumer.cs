@@ -13,7 +13,7 @@ namespace Rabbitmq.Consumer
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.QueueDeclare(queue: "hello",
+                channel.QueueDeclare(queue: "routeKeyTest",
                                      durable: false,
                                      exclusive: false,
                                      autoDelete: false,
@@ -26,7 +26,8 @@ namespace Rabbitmq.Consumer
                     var message = Encoding.UTF8.GetString(body);
                     Console.WriteLine(" [x] Received {0}", message);
                 };
-                channel.BasicConsume(queue: "hello",
+         
+                channel.BasicConsume(queue: "routeKeyTest",
                                      autoAck: true,
                                      consumer: consumer);
 

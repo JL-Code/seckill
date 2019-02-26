@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using MySql.Data.EntityFrameworkCore.Extensions;
+using SecKill.Application.RabbitMQ;
 using SecKill.Application.Services;
 using SecKill.Domain.AggregatesModel;
 using SecKill.Domain.SeedWork;
@@ -23,6 +24,8 @@ namespace SecKill
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            // 程序启动时启动
+            ConsumerSingleton.Instance.Start();
         }
 
         public IConfiguration Configuration { get; }
