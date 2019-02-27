@@ -20,7 +20,7 @@ namespace SecKill.Controllers
         public IActionResult Post()
         {
             // 连接工厂
-            var factory = new ConnectionFactory() { HostName = "localhost", UserName = "guest", Password = "123456" };
+            var factory = new ConnectionFactory() { HostName = "192.168.31.99", UserName = "admin", Password = "123456" };
             // 创建连接
             using (var connection = factory.CreateConnection())
             {

@@ -25,7 +25,7 @@ namespace SecKill
         {
             Configuration = configuration;
             // 程序启动时启动
-            ConsumerSingleton.Instance.Start();
+            ConsumerSingleton.Instance.Start(Configuration.GetValue<string>("Rabbitmq:Server"));
         }
 
         public IConfiguration Configuration { get; }
@@ -89,7 +89,9 @@ namespace SecKill
             services.AddTransient<ISeckillGoodsRepository, SeckillGoodsRepository>();
             services.AddTransient<ISecKillOrderRepository, SecKillOrderRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddSingleton(new RedisManager("localhost"));
+
+            var redisServer = Configuration.GetSection("Redis").GetValue<string>("Server");
+            services.AddSingleton(new RedisManager(redisServer));
 
             #endregion
 

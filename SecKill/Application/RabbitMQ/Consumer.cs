@@ -41,7 +41,7 @@ namespace SecKill.Application.RabbitMQ
 
         public static ConsumerSingleton Instance { get => Nested.Instance; }
 
-        public void Start()
+        public void Start(string server)
         {
             logger.Info("秒杀订单处理消费者已启动");
             if (!_start)
@@ -51,12 +51,12 @@ namespace SecKill.Application.RabbitMQ
                     _start = true;
                 }
             }
-            Execute();
+            Execute(server);
         }
 
-        private void Execute()
+        private void Execute(string server)
         {
-            var factory = new ConnectionFactory() { HostName = "localhost", UserName = "guest", Password = "123456" };
+            var factory = new ConnectionFactory() { HostName = server, UserName = "admin", Password = "123456" };
             var connection = factory.CreateConnection();
             var channel = connection.CreateModel();
             channel.QueueDeclare(queue: SECKILL_QUEUE,
